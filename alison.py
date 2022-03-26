@@ -90,7 +90,7 @@ for column in csv.reader(io_string, delimiter=',', quotechar="|"):
                 elem = WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.ID, "alison_logo")))
                 elem.click()
 
-            time.sleep(2)
+            time.sleep(5)
             for article in WebDriverWait(driver, 20).until(EC.visibility_of_all_elements_located((By.CLASS_NAME, "widget--completed"))):
                 get_course_name = [my_elem.text for my_elem in WebDriverWait(article, 20).until(EC.visibility_of_all_elements_located((By.CLASS_NAME, "widget__course-title")))]
                 get_scores = [my_elem.text for my_elem in WebDriverWait(article, 20).until(EC.visibility_of_all_elements_located((By.CLASS_NAME, "widget__score")))]
