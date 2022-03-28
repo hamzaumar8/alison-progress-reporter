@@ -15,6 +15,7 @@ driver  = webdriver.Chrome(PATH)
 # to maximize the browser window
 # driver.maximize_window()
 
+# Write to csv file
 def fileWriteCSV(filename, header, data):
     with open(filename, 'w', encoding='UTF8', newline='') as f:
         writer = csv.writer(f)
@@ -29,6 +30,7 @@ errorHeader = ['Timestamp','Alison ID #:','Alison Email Address',"Student's Regi
 msExcel = 'Microsoft Excel 2013 - Intermediate Course'
 msPPT ='Microsoft PowerPoint 2013 for Beginners - Create Amazing Presentations'
 msWord = 'Diploma in Microsoft Word 2013 Intermediate'
+divider = "===================================================================================================="
 
 currentUrl = driver.current_url
 siteUrl = "https://alison.com/"
@@ -80,22 +82,34 @@ for column in csv.reader(io_string, delimiter=',', quotechar="|"):
         if driver.current_url == "https://alison.com/login":
             errorData.append(column)
             print(f'login credentials failed for {column}')
+            print(divider)
             fileWriteCSV('result.csv',header,resultData)
             fileWriteCSV('error.csv',errorHeader,errorData)
             continue
         else:
+            # Check if current URL is alison.com or dashboard URL
             if driver.current_url == siteUrl or driver.current_url == dashboardUrl:
                 driver.get(dashboardUrl)
-            else:      
+            else:  
+                    
                 elem = WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.ID, "alison_logo")))
                 elem.click()
 
+            # reset path
+            # resert =  WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.CLASS_NAME, "dash-reset")))
+            # resert.click()
+            # time.sleep(1)
+
+            # print("worked")
+            
+            # Loop through completed courses and get the coursees and scores
             time.sleep(5)
             for article in WebDriverWait(driver, 20).until(EC.visibility_of_all_elements_located((By.CLASS_NAME, "widget--completed"))):
                 get_course_name = [my_elem.text for my_elem in WebDriverWait(article, 20).until(EC.visibility_of_all_elements_located((By.CLASS_NAME, "widget__course-title")))]
                 get_scores = [my_elem.text for my_elem in WebDriverWait(article, 20).until(EC.visibility_of_all_elements_located((By.CLASS_NAME, "widget__score")))]
 
             time.sleep(2)
+            # Initial a score path list and set all values to zero
             scorePath = [0,0,0]
             mn = [countInd, index_number,student_email,alision_ID]
             for course_title,score in zip(get_course_name, get_scores):
@@ -116,7 +130,7 @@ for column in csv.reader(io_string, delimiter=',', quotechar="|"):
             driver.get("https://alison.com/logout/")
             
         countInd= countInd + 1   
-        driver.implicitly_wait(5)
+        driver.implicitly_wait(2)
       
         resultData.append(mn)
         fileWriteCSV('result.csv',header,resultData)
@@ -125,9 +139,12 @@ for column in csv.reader(io_string, delimiter=',', quotechar="|"):
         print(e)
         driver.quit()
     
+    print(divider)
 
-
-print("finally", resultData)
+# print("finally", resultData)
+print(divider)
+print("PROCCES IS DONE. HAMZA IS A GENIUS")
+print(divider)
 
 fileWriteCSV('result.csv',header,resultData)
 fileWriteCSV('error.csv',errorHeader,errorData)
