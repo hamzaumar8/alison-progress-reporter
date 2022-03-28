@@ -78,7 +78,7 @@ for column in csv.reader(io_string, delimiter=',', quotechar="|"):
         elem = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "submit-login")))
         elem.click()
             
-        time.sleep(5)
+        time.sleep(2)
         if driver.current_url == "https://alison.com/login":
             errorData.append(column)
             print(f'login credentials failed for {column}')
@@ -91,7 +91,6 @@ for column in csv.reader(io_string, delimiter=',', quotechar="|"):
             if driver.current_url == siteUrl or driver.current_url == dashboardUrl:
                 driver.get(dashboardUrl)
             else:  
-                    
                 elem = WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.ID, "alison_logo")))
                 elem.click()
 
@@ -125,7 +124,7 @@ for column in csv.reader(io_string, delimiter=',', quotechar="|"):
                 mn.append(x)
             print("success", mn)
 
-            driver.implicitly_wait(5)
+            driver.implicitly_wait(2)
             # logout 
             driver.get("https://alison.com/logout/")
             
