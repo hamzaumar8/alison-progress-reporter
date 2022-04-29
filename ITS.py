@@ -13,7 +13,7 @@ from selenium.webdriver.support import expected_conditions as EC
 PATH = "C:\Program Files (x86)\chromedriver.exe"
 driver  = webdriver.Chrome(PATH)
 # to maximize the browser window
-# driver.maximize_window()
+driver.maximize_window()
 
 # Write to csv file
 def fileWriteCSV(filename, header, data):
@@ -36,7 +36,7 @@ currentUrl = driver.current_url
 siteUrl = "https://alison.com/"
 dashboardUrl = "https://alison.com/dashboard/"
 loginUrl = "https://alison.com/login/"
-
+ 
 password1 = "Its101$1"
 password2 = "ITS101$1"
 password3 = "Its10141"
@@ -94,13 +94,11 @@ for column in csv.reader(io_string, delimiter=',', quotechar="|"):
                 elem = WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.ID, "alison_logo")))
                 elem.click()
 
-            # reset path
-            # resert =  WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.CLASS_NAME, "dash-reset")))
-            # resert.click()
-            # time.sleep(1)
+            # # dashboard Reset
+            # WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.CLASS_NAME, "dash-reset"))).click()
 
-            # print("worked")
-            
+            # reset = WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.CLASS_NAME,"widget__menu-cta")))
+            # reset.click()
             # Loop through completed courses and get the coursees and scores
             time.sleep(5)
             for article in WebDriverWait(driver, 20).until(EC.visibility_of_all_elements_located((By.CLASS_NAME, "widget--completed"))):
