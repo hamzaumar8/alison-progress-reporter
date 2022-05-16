@@ -25,10 +25,11 @@ def fileWriteCSV(filename, header, data):
         writer.writerows(data)
 
 
-databaseJourney = 'Microsoft Access 2013 for Beginners - Start Your Database Journey'
-databaseMaster ='Microsoft Access 2013 - Advanced Master Databases'
-header = ['/llb','Reg. No.', 'email', databaseJourney, databaseMaster]
-errorHeader = ['Timestamp','Alison Email Address',"Student's Registration Number (UCC)"]
+header = ['/llb','Reg. No.', 'email', 'Alison ID#', 'Word', 'Excel', 'PPT']
+errorHeader = ['Timestamp','Alison ID #:','Alison Email Address',"Student's Registration Number (UCC)"]
+msExcel = 'Microsoft Excel 2013 - Intermediate Course'
+msPPT ='Microsoft PowerPoint 2013 for Beginners - Create Amazing Presentations'
+msWord = 'Diploma in Microsoft Word 2013 Intermediate'
 divider = "===================================================================================================="
 
 currentUrl = driver.current_url
@@ -36,7 +37,10 @@ siteUrl = "https://alison.com/"
 dashboardUrl = "https://alison.com/dashboard/"
 loginUrl = "https://alison.com/login/"
  
-password1 = "INF215$1"
+password1 = "Its101$1"
+password2 = "ITS101$1"
+password3 = "Its10141"
+password4 = "Its10141"
 
 
 def wait_for_element_to_be_clickable(element):
@@ -57,8 +61,9 @@ for column in csv.reader(io_string, delimiter=',', quotechar="|"):
     driver.get("https://alison.com/login")
     
     # set user email
-    index_number = column[0]
-    student_email = column[1]
+    alision_ID = column[1]
+    student_email = column[2]
+    index_number = column[3]
 
     try:
         email = driver.find_element(By.NAME, 'email')
@@ -89,6 +94,12 @@ for column in csv.reader(io_string, delimiter=',', quotechar="|"):
                 elem = WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.ID, "alison_logo")))
                 elem.click()
 
+            # # dashboard Reset
+            # WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.CLASS_NAME, "dash-reset"))).click()
+
+            # reset = WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.CLASS_NAME,"widget__menu-cta")))
+            # reset.click()
+            # Loop through completed courses and get the coursees and scores
             time.sleep(5)
             for article in WebDriverWait(driver, 20).until(EC.visibility_of_all_elements_located((By.CLASS_NAME, "widget--completed"))):
                 get_course_name = [my_elem.text for my_elem in WebDriverWait(article, 20).until(EC.visibility_of_all_elements_located((By.CLASS_NAME, "widget__course-title")))]
@@ -96,14 +107,16 @@ for column in csv.reader(io_string, delimiter=',', quotechar="|"):
 
             time.sleep(2)
             # Initial a score path list and set all values to zero
-            scorePath = [0,0]
-            mn = [countInd, index_number,student_email]
+            scorePath = [0,0,0]
+            mn = [countInd, index_number,student_email,alision_ID]
             for course_title,score in zip(get_course_name, get_scores):
                 score = int(score.rstrip(score[-1]))
-                if course_title == databaseMaster:
+                if course_title == msWord:
                     scorePath[0] = score
-                if course_title == databaseJourney:
+                if course_title == msExcel:
                     scorePath[1] = score
+                if course_title == msPPT:
+                    scorePath[2] = score
             
             for x in scorePath:
                 mn.append(x)
